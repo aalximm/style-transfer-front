@@ -1,0 +1,9 @@
+.actions {
+	text-align: center !important;
+	display: flex;
+	/* justify-content: center; */
+}
+
+.actionButton {
+	margin-right: .75em !important;
+}

@@ -1,0 +1,33 @@
+.full_height {
+	height: 90vh;
+	width: 100vh !important;
+	/* justify-content: space-around !important; */
+}
+
+.image_row {
+	height: 70% !important;
+}
+
+.image_column {
+	max-height: 100%;
+}
+
+.button_row {
+	height: 30% !important;
+	display: flex;
+	align-items: center;
+	justify-content: center !important;
+}
+
+.image_row_mobile {
+}
+
+.image_column_mobile {
+	max-height: 100%;
+}
+
+.button_row_mobile {
+	display: flex;
+	align-items: center;
+	justify-content: center !important;
+}
