@@ -27,7 +27,6 @@ export interface StyleSelectProps extends DivProps {
 	// options: DropdownItemProps[];
 }
 
-
 export const StyleSelect = ({
 	setStyleKey,
 	// options,
@@ -35,7 +34,7 @@ export const StyleSelect = ({
 	color,
 	...props
 }: StyleSelectProps): JSX.Element => {
-	const [options, setOptions] = useState<DropdownItemProps[]>([])
+	const [options, setOptions] = useState<DropdownItemProps[]>([]);
 	const [imageUrlMap, setImageUrlMap] = useState<Map<string, string>>();
 	const [activeStyleKey, setActiveStyleKey] = useState<string>();
 	const [dropdownText, setDropdownText] = useState<any>();
@@ -59,10 +58,7 @@ export const StyleSelect = ({
 	};
 
 	const fetchOptions = async () => {
-		
-		const response = await tryToPerform(
-			loadStyleOptions
-		)
+		const response = await tryToPerform(loadStyleOptions);
 
 		if (!response.success) {
 			setFetchingError(true);
@@ -75,19 +71,22 @@ export const StyleSelect = ({
 		const tempOptions: DropdownItemProps[] = [];
 		const tempImgUrlMap: Map<string, string> = new Map();
 
+		await Promise.all(
+			responseBody.map(async (style) => {
+				const option: DropdownItemProps = {
+					text: style.name,
+					description: style.description,
+					key: style.style_key,
+					value: style.style_key,
+				};
 
-
-		responseBody.map(async (style) => {
-			const option: DropdownItemProps = {
-				text: style.name,
-				description: style.description,
-				key: style.style_key,
-				value: style.style_key,
-			};
-
-			tempOptions.push(option);
-			tempImgUrlMap.set(style.style_key, await getImage(style.image_url));
-		});
+				tempOptions.push(option);
+				tempImgUrlMap.set(
+					style.style_key,
+					await getImage(style.image_url),
+				);
+			}),
+		);
 
 		setOptions(tempOptions);
 		setImageUrlMap(tempImgUrlMap);
