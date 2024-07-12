@@ -17,7 +17,7 @@ import { tryToPerform } from '@/utils/async.util';
 import { getImage } from '@/app/actions/image.loader';
 
 export interface StyleSelectProps extends DivProps {
-	setStyleKey: (styleKey: string) => void;
+	setStyleKey: (styleKey: string) => void; // eslint-disable-line no-unused-vars
 	color?: SemanticCOLORS
 }
 
@@ -34,8 +34,8 @@ export const StyleSelect = ({
 	const [fetchingError, setFetchingError] = useState<boolean>(false);
 
 	const handleChange: (
-		event: React.SyntheticEvent<HTMLElement>,
-		data: DropdownProps,
+		event: React.SyntheticEvent<HTMLElement>, // eslint-disable-line no-unused-vars
+		data: DropdownProps, // eslint-disable-line no-unused-vars
 	) => void = (_, props) => {
 		const option = props.options?.filter((v) => v.value == props.value)[0];
 

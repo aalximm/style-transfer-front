@@ -3,7 +3,7 @@ import styles from './BottomButton.module.css';
 import { Button, ButtonContentProps } from 'semantic-ui-react';
 
 export interface BottomButtonProps extends ButtonContentProps {
-	handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+	handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void; // eslint-disable-line no-unused-vars
 	disabled: boolean;
 	children: React.ReactNode;
 }

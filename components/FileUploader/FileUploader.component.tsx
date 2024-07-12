@@ -7,7 +7,7 @@ import {
 export interface FileUploaderProps extends DivProps {
 	description: string;
 	buttonText: string;
-	setImageUrl: (url: string) => void;
+	setImageUrl: (url: string) => void; // eslint-disable-line no-unused-vars
 }
 
 export const FileUploader = ({
