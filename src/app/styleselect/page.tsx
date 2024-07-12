@@ -115,7 +115,7 @@ export default function StyleSelectPage() {
 					</Header.Subheader>
 				</Header.Content>
 			</Header>
-			<Dimmer active={loading}>
+			<Dimmer active={loading} page>
 				<Loader indeterminate>Preparing Files</Loader>
 			</Dimmer>
 			<GridContainer

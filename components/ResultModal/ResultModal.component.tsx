@@ -41,7 +41,7 @@ export const ResultModal = ({
 	};
 
 	return (
-		<Modal basic open={open} centered className={cn(className, styles.modal)} size='small' onClose={close}>
+		<Modal basic open={open} centered className={cn(className, styles.modal)} size='small' onClose={close} >
 			<Header as="h2" textAlign="center" inverted>
 				{title}
 				<HeaderSubheader>{description}</HeaderSubheader>
