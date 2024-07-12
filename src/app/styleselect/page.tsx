@@ -1,6 +1,6 @@
 'use client';
 
-import { Header, Dimmer, Loader } from 'semantic-ui-react';
+import { Header, Dimmer, Loader, Icon } from 'semantic-ui-react';
 import {
 	FileUploader,
 	ImageView,
@@ -10,7 +10,7 @@ import {
 	GridContainer,
 } from '../../../components';
 import { useState } from 'react';
-
+import Link from 'next/link';
 
 export default function StyleSelectPage() {
 	const [imageUrls, setImageUrls] = useState<{
@@ -19,6 +19,7 @@ export default function StyleSelectPage() {
 	}>({});
 	const [styleKey, setStyleKey] = useState<string>();
 	const [loading, setLoading] = useState(false);
+	const [resultOpen, setResultOpen] = useState(false);
 
 	type ImageKey = keyof typeof imageUrls;
 
@@ -89,6 +90,7 @@ export default function StyleSelectPage() {
 
 				setFile('result', blobUrl);
 				setLoading(false);
+				setResultOpen(true);
 				pooling = false;
 			} else {
 				setLoading(false);
@@ -97,19 +99,19 @@ export default function StyleSelectPage() {
 				throw new Error('Server Error');
 			}
 		}
-
-		// deleteFile('content')
-		// deleteFile('style')
 	};
 
 	return (
 		<>
 			<Header as="h1" textAlign="center">
 				<Header.Content>
-					Style Tranfer App
+					Style Tranfer
 					<Header.Subheader>
 						Choose content and style photos and watch what will
 						happen
+						<Link href="/">
+							<Icon link name="question circle" />
+						</Link>
 					</Header.Subheader>
 				</Header.Content>
 			</Header>
@@ -143,9 +145,10 @@ export default function StyleSelectPage() {
 			/>
 
 			<ResultModal
-				open={imageUrls.result !== undefined}
+				open={resultOpen}
 				close={() => {
 					deleteFile('result');
+					setResultOpen(false);
 				}}
 				title="Result"
 				description="You can download resulted image or try another styles"
