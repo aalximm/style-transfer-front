@@ -1,6 +1,7 @@
 .actions {
 	text-align: center !important;
 	display: flex;
+	justify-content: center !important;
 }
 
 .actionButton {

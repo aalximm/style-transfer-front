@@ -53,11 +53,11 @@ export const ResultModal = ({
 				/>
 			</ModalContent>
 			<ModalActions className={styles.actions}>
-				<Button icon onClick={handleDownload} size='massive' fluid className={styles.actionButton}>
+				<Button icon onClick={handleDownload} size='large' fluid className={styles.actionButton}>
 					<Icon name="download" />
 					Download
 				</Button>
-				<Button onClick={close} size='massive' fluid className={styles.actionButton}>Try Again</Button>
+				<Button onClick={close} size='large' fluid className={styles.actionButton}>Try Again</Button>
 			</ModalActions>
 		</Modal>
 	);

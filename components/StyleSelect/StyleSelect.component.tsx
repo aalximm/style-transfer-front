@@ -18,7 +18,7 @@ import { getImage } from '@/app/actions/image.loader';
 
 export interface StyleSelectProps extends DivProps {
 	setStyleKey: (styleKey: string) => void; // eslint-disable-line no-unused-vars
-	color?: SemanticCOLORS
+	color?: SemanticCOLORS;
 }
 
 export const StyleSelect = ({
@@ -29,7 +29,7 @@ export const StyleSelect = ({
 	const [options, setOptions] = useState<DropdownItemProps[]>([]);
 	const [imageUrlMap, setImageUrlMap] = useState<Map<string, string>>();
 	const [activeStyleKey, setActiveStyleKey] = useState<string>();
-	const [dropdownText, setDropdownText] = useState<any>();
+	const [dropdownValue, setDropdownValue] = useState<any>();
 	const [isFetching, setIsFetching] = useState<boolean>(true);
 	const [fetchingError, setFetchingError] = useState<boolean>(false);
 
@@ -43,7 +43,7 @@ export const StyleSelect = ({
 			return;
 		}
 
-		setDropdownText(option.text);
+		setDropdownValue(option.value);
 		setActiveStyleKey(props.value as string);
 		setStyleKey(props.value as string);
 	};
@@ -63,26 +63,31 @@ export const StyleSelect = ({
 			const tempOptions: DropdownItemProps[] = [];
 			const tempImgUrlMap: Map<string, string> = new Map();
 
-			await Promise.all(
-				responseBody.map(async (style) => {
-					const option: DropdownItemProps = {
-						text: style.name,
-						description: style.description,
-						key: style.style_key,
-						value: style.style_key,
-					};
+			for (const style of responseBody) {
+				const option: DropdownItemProps = {
+					text: style.name,
+					// description: style.description,
+					key: style.style_key,
+					value: style.style_key,
+					content: (
+						<>
+							<p>{style.name}</p>
+							<p style={{ fontSize: 12 }}>
+								<i> - {style.description}</i>
+							</p>
+						</>
+					),
+				};
 
-					const image = await tryToPerform(() =>
-						getImage(style.image_url),
-					);
+				const image = await tryToPerform(() =>
+					getImage(style.image_url),
+				);
 
-					if (image.success) {
-						tempOptions.push(option);
-
-						tempImgUrlMap.set(style.style_key, image.result);
-					}
-				}),
-			);
+				if (image.success) {
+					tempOptions.push(option);
+					tempImgUrlMap.set(style.style_key, image.result);
+				}
+			}
 
 			if (tempOptions.length == 0) {
 				setFetchingError(true);
@@ -96,7 +101,7 @@ export const StyleSelect = ({
 			setStyleKey(tempOptions[0].key);
 
 			setActiveStyleKey(tempOptions[0].key);
-			setDropdownText(tempOptions[0].text);
+			setDropdownValue(tempOptions[0].value);
 
 			setIsFetching(false);
 		};
@@ -120,19 +125,17 @@ export const StyleSelect = ({
 									src={imageUrlMap.get(activeStyleKey)}
 									className={styles.image}
 									rounded
-									alt='style image'
+									alt="style image"
 								/>
 							)}
 						</div>
 						<Dropdown
 							selection
+							upward
 							options={options}
-							fluid
-							floating
-							pointing="bottom"
 							className={styles.dropdown}
 							onChange={handleChange}
-							text={dropdownText}
+							value={dropdownValue}
 							disabled={isFetching}
 							loading={isFetching}
 						/>
@@ -145,7 +148,7 @@ export const StyleSelect = ({
 								src="https://cdna.artstation.com/p/assets/images/images/046/103/074/large/amir-20220202-170113.jpg"
 								className={styles.image}
 								rounded
-								alt='sad image'
+								alt="sad image"
 							/>
 						</div>
 						<Message negative>

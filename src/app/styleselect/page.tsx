@@ -67,12 +67,17 @@ export default function StyleSelectPage() {
 			return Promise.reject<Response>(e);
 		});
 
+		if (response.status != 200) {
+			setLoading(false);
+			return;
+		}
+
 		const taskId = (await response.json())['task_id'];
 
 		let pooling = true;
 
 		while (pooling) {
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+			await new Promise((resolve) => setTimeout(resolve, 3000));
 
 			let result = await fetch(
 				backendUrl + `/image-styler/result/${taskId}`,

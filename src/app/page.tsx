@@ -1,10 +1,6 @@
 'use client';
 
-import {
-	Container,
-	Header,
-	Image,
-} from 'semantic-ui-react';
+import { Container, Header, Image } from 'semantic-ui-react';
 import Link from 'next/link';
 import { BottomButton } from '../../components';
 
@@ -26,13 +22,13 @@ export default function Home() {
 				src="https://miro.medium.com/v2/resize:fit:828/format:webp/0*bWkWBhe1HbidTTL6.png"
 				centered
 				fluid
-				alt='example'
+				alt="example"
 			/>
 			<div style={{ textAlign: 'center', marginTop: '2em' }}>
 				<Link href="/styleselect">
 					<BottomButton handleClick={()=>{}} disabled={false}>
-						I Want to Try
-					</BottomButton>
+					I Want to Try
+				</BottomButton>
 				</Link>
 			</div>
 		</Container>
