@@ -15,7 +15,6 @@ export const FileUploader = ({
 	buttonText,
 	setImageUrl,
 	className,
-	...props
 }: FileUploaderProps): JSX.Element => {
 	const fileInputRef = useRef(null);
 
@@ -24,7 +23,6 @@ export const FileUploader = ({
 	};
 
 	const handleFileChanges = (e: React.ChangeEvent<HTMLInputElement>) => {
-		console.log('trying to upload');
 		if (
 			e.target.files &&
 			e.target.files[0]
@@ -34,7 +32,7 @@ export const FileUploader = ({
 	};
 
 	return (
-		<Segment placeholder>
+		<Segment placeholder className={className}>
 			<Header icon>
 				<Icon name="upload" />
 				{description}

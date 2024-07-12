@@ -1,7 +1,5 @@
-import { ButtonProps, DivProps } from 'react-html-props';
 import cn from 'classnames';
 import styles from './BottomButton.module.css';
-import { ReactEventHandler } from 'react';
 import { Button, ButtonContentProps } from 'semantic-ui-react';
 
 export interface BottomButtonProps extends ButtonContentProps {

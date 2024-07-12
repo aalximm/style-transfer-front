@@ -1,7 +1,5 @@
 import { DivProps } from 'react-html-props';
-import cn from 'classnames';
 import styles from './GridContainer.module.css';
-import { ReactNode } from 'react';
 import { Grid } from 'semantic-ui-react';
 
 export interface GridContainerProps extends DivProps {
@@ -14,22 +12,8 @@ export const GridContainer = ({
 	topLeftContent,
 	topRightContent,
 	bottomContent,
-	...props
 }: GridContainerProps): JSX.Element => {
 	return (
-		// <Grid container className={styles.full_height}>
-		// 	<Grid.Row columns={2} className={styles.image_row} stretched>
-		// 		<Grid.Column className={styles.image_column}>
-		// 			{topLeftContent}
-		// 		</Grid.Column>
-		// 		<Grid.Column className={styles.image_column}>
-		// 			{topRightContent}
-		// 		</Grid.Column>
-		// 	</Grid.Row>
-		// 	<Grid.Row columns={1} className={styles.button_row}>
-		// 		{bottomContent}
-		// 	</Grid.Row>
-		// </Grid>
 		<Grid container className={styles.full_height}>
 			{/* Ряд для больших экранов */}
 			<Grid.Row

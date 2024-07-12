@@ -2,7 +2,6 @@ import { DivProps } from 'react-html-props';
 import cn from 'classnames';
 import styles from './ImageView.module.css';
 import {
-	Container,
 	Image,
 	Button,
 	Segment,
@@ -13,6 +12,7 @@ export interface ImageViewProps extends DivProps {
 	imageUrl: string;
 	deleteImage?: () => void;
 	basic?: boolean;
+	color?: SemanticCOLORS
 }
 
 export const ImageView = ({
@@ -20,7 +20,6 @@ export const ImageView = ({
 	deleteImage,
 	className,
 	basic = true,
-	color,
 	...props
 }: ImageViewProps): JSX.Element => {
 	return (
@@ -30,7 +29,12 @@ export const ImageView = ({
 			{...props}
 		>
 			<>
-				<Image src={imageUrl} className={styles.image} rounded />
+				<Image
+					src={imageUrl}
+					className={styles.image}
+					rounded
+					alt="some image"
+				/>
 				{deleteImage !== undefined && (
 					<Button
 						circular

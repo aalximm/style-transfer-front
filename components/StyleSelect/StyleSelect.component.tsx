@@ -5,17 +5,11 @@ import {
 	Segment,
 	Image,
 	Dropdown,
-	Select,
 	DropdownItemProps,
-	Header,
 	DropdownProps,
-	Dimmer,
-	Loader,
-	Icon,
-	Card,
-	Container,
 	Message,
 	MessageHeader,
+	SemanticCOLORS,
 } from 'semantic-ui-react';
 import { useEffect, useState } from 'react';
 import { loadStyleOptions } from '@/app/actions/back.loader';
@@ -24,14 +18,12 @@ import { getImage } from '@/app/actions/image.loader';
 
 export interface StyleSelectProps extends DivProps {
 	setStyleKey: (styleKey: string) => void;
-	// options: DropdownItemProps[];
+	color?: SemanticCOLORS
 }
 
 export const StyleSelect = ({
 	setStyleKey,
-	// options,
 	className,
-	color,
 	...props
 }: StyleSelectProps): JSX.Element => {
 	const [options, setOptions] = useState<DropdownItemProps[]>([]);
@@ -44,8 +36,7 @@ export const StyleSelect = ({
 	const handleChange: (
 		event: React.SyntheticEvent<HTMLElement>,
 		data: DropdownProps,
-	) => void = (e, props) => {
-		console.log(props);
+	) => void = (_, props) => {
 		const option = props.options?.filter((v) => v.value == props.value)[0];
 
 		if (!option) {
@@ -57,51 +48,61 @@ export const StyleSelect = ({
 		setStyleKey(props.value as string);
 	};
 
-	const fetchOptions = async () => {
-		const response = await tryToPerform(loadStyleOptions);
-
-		if (!response.success) {
-			setFetchingError(true);
-			setIsFetching(false);
-			return;
-		}
-
-		const responseBody = response.result;
-
-		const tempOptions: DropdownItemProps[] = [];
-		const tempImgUrlMap: Map<string, string> = new Map();
-
-		await Promise.all(
-			responseBody.map(async (style) => {
-				const option: DropdownItemProps = {
-					text: style.name,
-					description: style.description,
-					key: style.style_key,
-					value: style.style_key,
-				};
-
-				tempOptions.push(option);
-				tempImgUrlMap.set(
-					style.style_key,
-					await getImage(style.image_url),
-				);
-			}),
-		);
-
-		setOptions(tempOptions);
-		setImageUrlMap(tempImgUrlMap);
-
-		setStyleKey(tempOptions[0].key);
-
-		setActiveStyleKey(tempOptions[0].key);
-		setDropdownText(tempOptions[0].text);
-
-		setIsFetching(false);
-	};
-
 	useEffect(() => {
+		const fetchOptions = async () => {
+			const response = await tryToPerform(loadStyleOptions);
+
+			if (!response.success) {
+				setFetchingError(true);
+				setIsFetching(false);
+				return;
+			}
+
+			const responseBody = response.result;
+
+			const tempOptions: DropdownItemProps[] = [];
+			const tempImgUrlMap: Map<string, string> = new Map();
+
+			await Promise.all(
+				responseBody.map(async (style) => {
+					const option: DropdownItemProps = {
+						text: style.name,
+						description: style.description,
+						key: style.style_key,
+						value: style.style_key,
+					};
+
+					const image = await tryToPerform(() =>
+						getImage(style.image_url),
+					);
+
+					if (image.success) {
+						tempOptions.push(option);
+
+						tempImgUrlMap.set(style.style_key, image.result);
+					}
+				}),
+			);
+
+			if (tempOptions.length == 0) {
+				setFetchingError(true);
+				setIsFetching(false);
+				return;
+			}
+
+			setOptions(tempOptions);
+			setImageUrlMap(tempImgUrlMap);
+
+			setStyleKey(tempOptions[0].key);
+
+			setActiveStyleKey(tempOptions[0].key);
+			setDropdownText(tempOptions[0].text);
+
+			setIsFetching(false);
+		};
+
 		fetchOptions();
-	}, []);
+	}, [setStyleKey]);
 
 	return (
 		<Segment
@@ -119,6 +120,7 @@ export const StyleSelect = ({
 									src={imageUrlMap.get(activeStyleKey)}
 									className={styles.image}
 									rounded
+									alt='style image'
 								/>
 							)}
 						</div>
@@ -143,11 +145,12 @@ export const StyleSelect = ({
 								src="https://cdna.artstation.com/p/assets/images/images/046/103/074/large/amir-20220202-170113.jpg"
 								className={styles.image}
 								rounded
+								alt='sad image'
 							/>
 						</div>
 						<Message negative>
 							<MessageHeader>Shit happens...</MessageHeader>
-							<p>server didn't respond</p>
+							<p>server didn&apos;t respond</p>
 						</Message>
 					</>
 				)}

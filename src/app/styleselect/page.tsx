@@ -1,6 +1,6 @@
 'use client';
 
-import { Header, Grid, Dimmer, Loader } from 'semantic-ui-react';
+import { Header, Dimmer, Loader } from 'semantic-ui-react';
 import {
 	FileUploader,
 	ImageView,
@@ -11,7 +11,6 @@ import {
 } from '../../../components';
 import { useState } from 'react';
 
-import styles from './selectorpage.module.css';
 
 export default function StyleSelectPage() {
 	const [imageUrls, setImageUrls] = useState<{
@@ -19,7 +18,6 @@ export default function StyleSelectPage() {
 		result?: string;
 	}>({});
 	const [styleKey, setStyleKey] = useState<string>();
-
 	const [loading, setLoading] = useState(false);
 
 	type ImageKey = keyof typeof imageUrls;
@@ -60,22 +58,45 @@ export default function StyleSelectPage() {
 		formData.append('content', await getFile('content'));
 		formData.append('style', styleKey);
 
-		const response = await fetch(
-			backendUrl + '/image-styler/forward/upload',
-			{
-				method: 'POST',
-				body: formData,
-			},
-		).catch((e) => {
+		const response = await fetch(backendUrl + '/image-styler/upload', {
+			method: 'POST',
+			body: formData,
+		}).catch((e) => {
 			setLoading(false);
 			return Promise.reject<Response>(e);
 		});
 
-		const blob = await response.blob();
-		const blobUrl = URL.createObjectURL(blob);
+		const taskId = (await response.json())['task_id'];
 
-		setFile('result', blobUrl);
-		setLoading(false);
+		let pooling = true;
+
+		while (pooling) {
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+
+			let result = await fetch(
+				backendUrl + `/image-styler/result/${taskId}`,
+			).catch((e) => {
+				setLoading(false);
+				pooling = false;
+				return Promise.reject<Response>(e);
+			});
+
+			if (result.status == 202) {
+				continue;
+			} else if (result.status == 200) {
+				const blob = await result.blob();
+				const blobUrl = URL.createObjectURL(blob);
+
+				setFile('result', blobUrl);
+				setLoading(false);
+				pooling = false;
+			} else {
+				setLoading(false);
+				pooling = false;
+
+				throw new Error('Server Error');
+			}
+		}
 
 		// deleteFile('content')
 		// deleteFile('style')
@@ -123,7 +144,6 @@ export default function StyleSelectPage() {
 
 			<ResultModal
 				open={imageUrls.result !== undefined}
-				// open
 				close={() => {
 					deleteFile('result');
 				}}

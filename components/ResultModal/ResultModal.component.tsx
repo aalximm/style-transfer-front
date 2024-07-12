@@ -26,13 +26,9 @@ export const ResultModal = ({
 	description,
 	open,
 	close,
-	children,
 	className,
-	...props
 }: ResultModalProps): JSX.Element => {
-	const handleDownload = (
-		event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-	) => {
+	const handleDownload = () => {
 		const link = document.createElement('a');
 		link.href = imageUrl;
 		link.download = 'style_transfer_result.jpg';

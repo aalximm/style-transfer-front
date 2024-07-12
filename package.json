@@ -1,5 +1,5 @@
 {
-  "name": "eth-course-app-2",
+  "name": "style-transfer-frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,23 +7,18 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint --fix",
-    "test": "jest",
-    "compile": "ts-node ./scripts/compile.ts ./src/contracts ./src/abi ./src/bitecode"
+    "test": "jest"
   },
   "dependencies": {
-    "@metamask/detect-provider": "^2.0.0",
     "babel-jest": "^29.7.0",
     "classnames": "^2.5.1",
-    "generator-generator": "^5.1.0",
     "identity-obj-proxy": "^3.0.0",
     "next": "14.0.3",
     "react": "^18",
     "react-dom": "^18",
     "react-html-props": "^2.0.9",
     "semantic-ui-css": "^2.5.0",
-    "semantic-ui-react": "^2.1.5",
-    "solc": "^0.8.23-fixed",
-    "yo": "^5.0.0"
+    "semantic-ui-react": "^2.1.5"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.4",
@@ -37,11 +32,13 @@
     "eslint": "^8.2.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.1.0",
+    "eslint-config-next": "14.2.5",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-unused-imports": "^4.0.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "prettier": "3.1.0",

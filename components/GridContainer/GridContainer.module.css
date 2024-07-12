@@ -1,7 +1,6 @@
 .full_height {
 	height: 90vh;
 	width: 100vh !important;
-	/* justify-content: space-around !important; */
 }
 
 .image_row {
@@ -17,9 +16,6 @@
 	display: flex;
 	align-items: center;
 	justify-content: center !important;
-}
-
-.image_row_mobile {
 }
 
 .image_column_mobile {

@@ -3,12 +3,8 @@
 import {
 	Container,
 	Header,
-	Grid,
-	Button,
 	Image,
-	GridColumn,
 } from 'semantic-ui-react';
-import styles from './grid.module.css';
 import Link from 'next/link';
 import { BottomButton } from '../../components';
 
@@ -30,6 +26,7 @@ export default function Home() {
 				src="https://miro.medium.com/v2/resize:fit:828/format:webp/0*bWkWBhe1HbidTTL6.png"
 				centered
 				fluid
+				alt='example'
 			/>
 			<div style={{ textAlign: 'center', marginTop: '2em' }}>
 				<Link href="/styleselect">
