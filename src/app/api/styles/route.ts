@@ -1,11 +1,10 @@
+import { IMAGE_QUERY_KEY } from '@/constants/network.constant';
 import { tryToPerform } from '@/utils/async.util';
 import { NextRequest, NextResponse } from 'next/server';
 
-export const queryKey = 'imagePath';
-
 export async function GET(request: NextRequest) {
 	const backendUrl = process.env.NEXT_PUBLIC_BACKEND_HOST;
-	const imagePathEncoded = request.nextUrl.searchParams.get(queryKey);
+	const imagePathEncoded = request.nextUrl.searchParams.get(IMAGE_QUERY_KEY);
 
 	if (!backendUrl || !imagePathEncoded) {		
 		return ServerError();

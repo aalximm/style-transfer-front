@@ -20,7 +20,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { loadStyleOptions } from '../actions/back.loader';
 import { tryToPerform } from '@/utils/async.util';
-import { queryKey } from '../api/styles/route';
+import { IMAGE_QUERY_KEY } from '@/constants/network.constant';
 
 export default function StyleSelectPage() {
 	const [imageUrls, setImageUrls] = useState<{
@@ -82,7 +82,7 @@ export default function StyleSelectPage() {
 				};
 
 				const searchParams = new URLSearchParams();
-				searchParams.set(queryKey, encodeURI(style.image_url));
+				searchParams.set(IMAGE_QUERY_KEY, encodeURI(style.image_url));
 
 				const image = await tryToPerform(async () => {
 					const imageResponse = await fetch(
