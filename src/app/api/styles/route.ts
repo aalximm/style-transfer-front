@@ -3,7 +3,7 @@ import { tryToPerform } from '@/utils/async.util';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
-	const backendUrl = process.env.NEXT_PUBLIC_BACKEND_HOST;
+	const backendUrl = process.env.NEXT_PUBLIC_BACKEND_HOST_FOR_DOCKER ?? process.env.NEXT_PUBLIC_BACKEND_HOST;
 	const imagePathEncoded = request.nextUrl.searchParams.get(IMAGE_QUERY_KEY);
 
 	if (!backendUrl || !imagePathEncoded) {		
