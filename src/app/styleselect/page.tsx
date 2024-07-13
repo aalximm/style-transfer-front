@@ -1,6 +1,13 @@
 'use client';
 
-import { Header, Dimmer, Loader, Icon } from 'semantic-ui-react';
+import {
+	Header,
+	Dimmer,
+	Loader,
+	Icon,
+	DropdownItemProps,
+	DropdownProps,
+} from 'semantic-ui-react';
 import {
 	FileUploader,
 	ImageView,
@@ -9,8 +16,11 @@ import {
 	StyleSelect,
 	GridContainer,
 } from '../../../components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { loadStyleOptions } from '../actions/back.loader';
+import { tryToPerform } from '@/utils/async.util';
+import { queryKey } from '../api/styles/route';
 
 export default function StyleSelectPage() {
 	const [imageUrls, setImageUrls] = useState<{
@@ -20,6 +30,98 @@ export default function StyleSelectPage() {
 	const [styleKey, setStyleKey] = useState<string>();
 	const [loading, setLoading] = useState(false);
 	const [resultOpen, setResultOpen] = useState(false);
+
+	const [options, setOptions] = useState<DropdownItemProps[]>([]);
+	const [imageUrlMap, setImageUrlMap] = useState<Map<string, string>>();
+	const [activeStyleKey, setActiveStyleKey] = useState<string>();
+	const [isFetching, setIsFetching] = useState<boolean>(true);
+	const [fetchingError, setFetchingError] = useState<boolean>(false);
+
+	const handleChange: (
+		event: React.SyntheticEvent<HTMLElement>, // eslint-disable-line no-unused-vars
+		data: DropdownProps, // eslint-disable-line no-unused-vars
+	) => void = (_, props) => {
+		const option = props.options?.filter((v) => v.value == props.value)[0];
+
+		if (!option) {
+			return;
+		}
+
+		setActiveStyleKey(props.value as string);
+		setStyleKey(props.value as string);
+	};
+
+	useEffect(() => {
+		const fetchOptions = async () => {
+			const response = await tryToPerform(loadStyleOptions);
+
+			if (!response.success) {
+				setFetchingError(true);
+				setIsFetching(false);
+				return;
+			}
+
+			const responseBody = response.result;
+
+			const tempOptions: DropdownItemProps[] = [];
+			const tempImgUrlMap: Map<string, string> = new Map();
+
+			for (const style of responseBody) {
+				const option: DropdownItemProps = {
+					text: style.name,
+					key: style.style_key,
+					value: style.style_key,
+					content: (
+						<>
+							<p>{style.name}</p>
+							<p style={{ fontSize: 12 }}>
+								<i> - {style.description}</i>
+							</p>
+						</>
+					),
+				};
+
+				const searchParams = new URLSearchParams();
+				searchParams.set(queryKey, encodeURI(style.image_url));
+
+				const image = await tryToPerform(async () => {
+					const imageResponse = await fetch(
+						'/api/styles?' + searchParams.toString(),
+					).catch((e) => {
+						console.log(e);
+
+						return Promise.reject(e);
+					});
+
+					const blob = await imageResponse.blob();
+					const blob_url = URL.createObjectURL(blob);
+					return blob_url;
+				});
+
+				if (image.success) {
+					tempOptions.push(option);
+					tempImgUrlMap.set(style.style_key, image.result);
+				}
+			}
+
+			if (tempOptions.length == 0) {
+				setFetchingError(true);
+				setIsFetching(false);
+				return;
+			}
+
+			setOptions(tempOptions);
+			setImageUrlMap(tempImgUrlMap);
+
+			setStyleKey(tempOptions[0].key);
+
+			setActiveStyleKey(tempOptions[0].key);
+
+			setIsFetching(false);
+		};
+
+		fetchOptions();
+	}, []);
 
 	type ImageKey = keyof typeof imageUrls;
 
@@ -64,7 +166,7 @@ export default function StyleSelectPage() {
 			body: formData,
 		}).catch((e) => {
 			setLoading(false);
-			return Promise.reject<Response>(e);
+			return e;
 		});
 
 		if (response.status != 200) {
@@ -138,7 +240,20 @@ export default function StyleSelectPage() {
 						/>
 					)
 				}
-				topRightContent={<StyleSelect setStyleKey={setStyleKey} />}
+				topRightContent={
+					<StyleSelect
+						options={options}
+						imageUrl={
+							activeStyleKey && imageUrlMap
+								? imageUrlMap.get(activeStyleKey)
+								: undefined
+						}
+						activeDropdownValue={activeStyleKey}
+						isFetching={isFetching}
+						fetchingError={fetchingError}
+						handleChange={handleChange}
+					/>
+				}
 				bottomContent={
 					<BottomButton
 						disabled={!imageUrls.content || styleKey === undefined}

@@ -18,7 +18,8 @@
     "react-dom": "^18",
     "react-html-props": "^2.0.9",
     "semantic-ui-css": "^2.5.0",
-    "semantic-ui-react": "^2.1.5"
+    "semantic-ui-react": "^2.1.5",
+    "use-state-with-callback": "^3.0.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.4",

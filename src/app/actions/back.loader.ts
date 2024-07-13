@@ -21,12 +21,6 @@ export async function loadStyleOptions(): Promise<StyleDto[]> {
 	});
 
 	let result = (await response.json()) as StyleDto[];
-	result = result.map((value) => {
-		return {
-			...value,
-			image_url: backendUrl + value.image_url,
-		};
-	});
 
 	return result;
 }
