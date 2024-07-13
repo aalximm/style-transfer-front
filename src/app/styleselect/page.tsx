@@ -27,7 +27,6 @@ export default function StyleSelectPage() {
 		content?: string;
 		result?: string;
 	}>({});
-	const [styleKey, setStyleKey] = useState<string>();
 	const [loading, setLoading] = useState(false);
 	const [resultOpen, setResultOpen] = useState(false);
 
@@ -48,7 +47,6 @@ export default function StyleSelectPage() {
 		}
 
 		setActiveStyleKey(props.value as string);
-		setStyleKey(props.value as string);
 	};
 
 	useEffect(() => {
@@ -113,8 +111,6 @@ export default function StyleSelectPage() {
 			setOptions(tempOptions);
 			setImageUrlMap(tempImgUrlMap);
 
-			setStyleKey(tempOptions[0].key);
-
 			setActiveStyleKey(tempOptions[0].key);
 
 			setIsFetching(false);
@@ -153,13 +149,14 @@ export default function StyleSelectPage() {
 		setLoading(true);
 		const backendUrl = process.env.NEXT_PUBLIC_BACKEND_HOST;
 
-		if (!(backendUrl && imageUrls.content && styleKey)) {
+		if (!(backendUrl && imageUrls.content && activeStyleKey)) {
+			setLoading(false)
 			return;
 		}
 
 		const formData = new FormData();
 		formData.append('content', await getFile('content'));
-		formData.append('style', styleKey);
+		formData.append('style', activeStyleKey);
 
 		const response = await fetch(backendUrl + '/image-styler/upload', {
 			method: 'POST',
@@ -256,7 +253,7 @@ export default function StyleSelectPage() {
 				}
 				bottomContent={
 					<BottomButton
-						disabled={!imageUrls.content || styleKey === undefined}
+						disabled={!imageUrls.content || activeStyleKey === undefined}
 						handleClick={sendFiles}
 					>
 						Send File

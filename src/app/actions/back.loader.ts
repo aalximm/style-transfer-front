@@ -8,7 +8,7 @@ export interface StyleDto {
 }
 
 export async function loadStyleOptions(): Promise<StyleDto[]> {
-	const backendUrl = process.env.NEXT_PUBLIC_BACKEND_HOST;
+	const backendUrl = process.env.NEXT_PUBLIC_BACKEND_HOST_FOR_DOCKER || process.env.NEXT_PUBLIC_BACKEND_HOST;
 
 	if (!backendUrl) {
 		throw new Error('back url not found');

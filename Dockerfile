@@ -8,7 +8,9 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build
+RUN NEXT_PUBLIC_BACKEND_HOST=APP_NEXT_PUBLIC_BACKEND_HOST npm run build
+
+ENTRYPOINT ["/app/entrypoint.sh"]
 
 CMD ["npm", "start"]
 
